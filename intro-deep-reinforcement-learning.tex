@@ -117,6 +117,7 @@
 			\item \textbf{trial-and-error search} (no supervisor)
 			\item \textbf{delayed reward} (no immediate feedback)
 		\end{itemize}
+		\item Someone argue~\cite{SILVER2021103535} that reward maximization is the sole principle that suffices to explain all aspects of intelligent behavior
 	\end{itemize}
 	\end{block}
 	\begin{block}{Application}
@@ -389,10 +390,10 @@
 			\begin{itemize}
 				\item Pro: avoid overestimation of the action value
 			\end{itemize}
-			\item \textbf{Dueling DQN} \faArrowRight \, use two separate networks to estimate the state value and the advantage function
-			\begin{itemize}
-				\item Pro: better estimation of the action value
-			\end{itemize}
+			%\item \textbf{Dueling DQN} \faArrowRight \, use two separate networks to estimate the state value and the advantage function
+			%\begin{itemize}
+		%		\item Pro: better estimation of the action value
+		%	\end{itemize}
 			\item \textbf{Prioritized Experience Replay} \faArrowRight \, sample the transitions from the replay buffer according to their TD-error
 			\begin{itemize}
 				\item Pro: better exploration of the state space
