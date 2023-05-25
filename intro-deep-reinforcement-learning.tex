@@ -17,6 +17,7 @@
 \usepackage{fontawesome}
 \usepackage{fancyvrb}
 \usepackage{minted}
+\usepackage{hyperref}
 \usepackage{multicol}
 \setminted[scala]{fontsize=\scriptsize,baselinestretch=1,obeytabs=true, tabsize=2}
 \usepackage[ddmmyyyy]{datetime}
@@ -117,7 +118,7 @@
 			\item \textbf{trial-and-error search} (no supervisor)
 			\item \textbf{delayed reward} (no immediate feedback)
 		\end{itemize}
-		\item Someone argue~\cite{SILVER2021103535} that reward maximization is the sole principle that suffices to explain all aspects of intelligent behavior
+		\item Someone argue(~\cite{SILVER2021103535}) that reward maximization is the sole principle that suffices to explain all aspects of intelligent behavior
 	\end{itemize}
 	\end{block}
 	\begin{block}{Application}
@@ -570,11 +571,11 @@ criterion = nn.MSELoss()
 \end{minted}
 
 \begin{minted}{python}
-# Perform a forward pass
-output = net(x)
 
 # Training loop
 for _ in range(epochs):
+	# Perform a forward pass
+	output = net(x)
 	# Zero the gradients
 	optimizer.zero_grad()
 	# Compute the loss
