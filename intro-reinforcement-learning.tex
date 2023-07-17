@@ -143,11 +143,93 @@
 	\begin{itemize}
 		\item Babies learn how to communicate by interacting with parents
 		\item Dogs learn how to behave by following the owner's orders
+		\item Me learn how to surfing by falling from the surfboard
 	\end{itemize}
-	\item 
+	\item Difference from supervised learning:
+	\begin{itemize}
+		\item \textbf{active} learning (learn by doing)
+		\item \textbf{sequential} interaction 
+	\end{itemize}
+	\item Learning guided by \textbf{goal} (goal-directed)
+	\item Learning without examples \faArrowRight \, guided by reward signal
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Interaction loop}
+\centering
+\Large An \textbf{agent} interacts with the \textbf{environment} by perceive an \textbf{observation} and take an \textbf{action} accordingly which leads to a \textbf{reward}
+\\
+\includegraphics[height=6cm]{img/interaction-loop.png}
+\\
+\Large
+\bold{Goal}: maximize the \textbf{cumulative reward} over time
+\end{frame}
+
+\begin{frame}{On problem expressiveness: reward hypothesis}
+\begin{block}{Reward hypothesis}
+\emph{Any goal can be formalized as the outcome of maximizing a cumulative reward}
+\begin{itemize}
+	\item Reinforcement learning is based on this hypothesis
+	\item Ideally, we can formalize any problem as a reinforcement learning problem
+\end{itemize}
+\end{block}
+
+\begin{alertblock}{Stronger statement: reward is enough}
+\emph{intelligence, and its associated abilities, can be understood as subserving the maximisation of reward by an agent acting in its environment.}
+\begin{itemize}
+	\item Really controversial
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Examples of Reinforcement Learning problems}
+\begin{multicols}{2}
+	\begin{itemize}
+		\item Learning how to surf
+		\item Managing a portfolio of cryptocurrencies
+		\item Controlling the battery of an electric car 
+		\item Playing chessboard
+		\item Solving a cubic cube
+	\end{itemize}
+	\begin{itemize}
+		\item[\faArrowRight] \textbf{Reward:} surfing time on the wave
+		\item[\faArrowRight] \textbf{Reward:} money earned
+		\item[\faArrowRight] \textbf{Reward:} battery level at the end of the day
+		\item[\faArrowRight] \textbf{Reward:} win the game
+		\item[\faArrowRight] \textbf{Reward:} solving time 
+	\end{itemize}
+\end{multicols}
+\large
+\textbf{NB!} if the goal is learn via environment interaction, then these are all reinforcement learning problems, regardless the algorithm involved
+\end{frame}
+
+\begin{frame}{Again, What is Reinforcement Learning}
+\begin{itemize}
+	\item There are several reasons why we should learn:
+	\begin{enumerate}
+		\item Find \textbf{solutions}
+		\begin{itemize}
+			\item A robot that reaches a target
+			\item A program that plays chess (really well)
+		\end{itemize}
+		\item Adapt \textbf{online} (dealing with unknowns)
+		\begin{itemize}
+			\item A robot that learns how to walk in a new environment
+			\item A program that learns how to play a new game
+		\end{itemize}
+	\end{enumerate}
+	\item Reinforcement learning is used in both cases
+	\item Adapting online is more challenging, and it is not just generalization (e.g. supervised learning)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Motivating real world examples}
+\centering
+\href{https://www.youtube.com/watch?v=V1eYniJ0Rnk}{\includegraphics[width=0.32\textwidth]{img/atari.png}}
+\href{https://www.youtube.com/watch?v=43cO39XBPIA}{\includegraphics[width=0.32\textwidth]{img/robots.png}}
+\href{https://www.youtube.com/watch?v=gn4nRCC9TwQ}{\includegraphics[width=0.32\textwidth]{img/ppo.png}}
+\end{frame}
 %===============================================================================
 \section*{}
 %===============================================================================
