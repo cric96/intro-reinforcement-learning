@@ -230,6 +230,127 @@
 \href{https://www.youtube.com/watch?v=43cO39XBPIA}{\includegraphics[width=0.32\textwidth]{img/robots.png}}
 \href{https://www.youtube.com/watch?v=gn4nRCC9TwQ}{\includegraphics[width=0.32\textwidth]{img/ppo.png}}
 \end{frame}
+\section{Formalisation}
+\begin{frame}{Reinforcement Learning: core concept}
+Reinforcement learning formalism include:
+\begin{itemize}
+	\item \textbf{Environment}:
+	\begin{itemize}
+		\item Typically stochastic and unknow but stationary
+		\item stochastic \faArrowRight \, the next state is not fully determined by the current state and action (random component)
+		\item Environment dynamics expressed as: $p(s', r | s, a)$ \faArrowRight \, not known by the agent
+	\end{itemize}
+	\item \textbf{Reward signal} 
+	\begin{itemize}
+		\item Identifies what is good in the environment (the goal)
+	\end{itemize}
+	\item \textbf{Agent}, which contain:
+	\begin{itemize}	
+		\item State
+		\item Policy
+		\item \emph{Value} function estimation?
+	\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Agent and environment}
+\centering
+\includegraphics[height=4cm]{img/interaction-loop.png}
+\begin{itemize}
+	\item Each time step $t$:
+	\begin{itemize}
+		\item The agent receives an observation $o_t \in \mathcal{O}$ (and a reward $r_t \in \mathbb{R}$)
+		\item Executes an action $a_t \in \mathcal{A}$
+	\end{itemize}
+	\item The environment 
+	\begin{itemize}
+		\item Receives the action $a_t$
+		\item Emits the observation $o_{t+1}$ and the reward $r_{t+1}$
+	\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Rewards}
+\begin{itemize}
+	\item A \bold{reward} $r_t$ is a scalar feedback signal
+	\begin{itemize}
+		\item In chess, $r_t = 1$ if the agent wins, $r_t = 0$ otherwise
+		\item In a robot, $r_t = 1$ if the robot reaches the target, $r_t = 0$ otherwise
+		\item For a portfolio, $r_t$ is the profit
+	\end{itemize}
+	\item Describes how well the agent is doing at step $t$ (define the goal)
+	\item The agent's sole objective is to maximize the discounted cumulative reward (\bold{return})
+	\begin{equation*}
+	\begin{split}
+		G_t & = r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \dots \\
+		 & = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}
+		\end{split}
+	\end{equation*}
+\end{itemize}
+\begin{alertblock}{Why discounted?}
+\begin{itemize}
+	\item Immediate rewards are more important than future rewards
+	\item $\gamma \in [0,1]$ is the discount factor
+	\item $\gamma = 0$ \faArrowRight \, myopic agent
+	\item $\gamma = 1$ \faArrowRight \, far-sighted agent
+\end{itemize}
+\end{alertblock}
+\end{frame}
+\begin{frame}{Agent state}
+\begin{itemize}
+	\item A full episode is a sequence of state-action-reward tuples (called \bold{trajectory})
+	
+	\item Example: $\mathcal{H}_T$ = $\{ (s_0, a_0, r_1), (s_1, a_1, r_2), \dots, (s_{T-1}, a_{T-1}, r_T) \}$
+	\item Markovian property: the future is independent of the past given the present
+	\begin{itemize}
+		\item Formula: $p(s_{t+1} | s_t, a_t) = p(s_{t+1} | \mathcal{H}_t, a_t)$
+		\item \textbf{NB!}: this means that the state $s_t$ is a \textbf{sufficient statistic} of the future
+	\end{itemize}
+	\item The environment state can be either:
+	\begin{itemize}
+		\item \textbf{Fully observable}: the agent knows the state
+		\item \textbf{Partially observable}: the agent partially observes environment state 
+	\end{itemize}
+	\item Today we will assume that the state is \textbf{fully observable} and \textbf{Markovian}
+	\item Real case scenario: \textbf{partially observable} and \textbf{non-Markovian}
+	\begin{itemize}
+		\item Also in that situation, reinforcement learning algorithms can be used (particularly the ones based on deep learning)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Agent Policy}
+\begin{itemize}
+	\item The agent's behavior is determined by a \bold{policy} $\pi$
+	\item A policy is a mapping from state to action
+	\item The policy can be either:
+	\begin{itemize}
+		\item \textbf{Deterministic}: $\pi: \mathcal{S} \rightarrow \mathcal{A}$
+		\item \textbf{Stochastic}: $\pi: \mathcal{S} \times \mathcal{A} \rightarrow [0,1]$
+	\end{itemize}
+	\item The policy is typically represented as a \textbf{lookup table} or a \textbf{neural network}
+	\item In both cases, the policy is based of an \textbf{estimation} of the \emph{value} function
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Value function}
+\begin{itemize}
+	\item The value function $v_{\pi}(s)$ gives the \textbf{long-term value} of state $s$ under policy $\pi$
+	\item The value of a state is the total amount of reward an agent can expect to accumulate over the future, starting from that state
+	\item Formally, it can be expressed as:
+	\begin{equation*}
+		\begin{split}
+			v_{\pi}(s) = \mathbb{E}_{\pi} [G_t | S_t = s] = \mathbb{E}_{\pi} \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | S_t = s \right]	
+		\end{split}
+	\end{equation*}
+	\item the state-action value function $q_{\pi}(s,a)$ gives the \textbf{long-term value} of state-action pair $(s,a)$ under policy $\pi$
+	\begin{itemize}
+		\item Formally, it can be expressed as:
+		\begin{equation*}
+			\begin{split}
+				q_{\pi}(s,a) = \mathbb{E}_{\pi} [G_t | S_t = s, A_t = a] = \mathbb{E}_{\pi} \left[ \sum_{k=0}^{\infty} \gamma^k R_{t+k+1} | S_t = s, A_t = a \right]
+			\end{split}
+		\end{equation*}
+	\end{itemize}
+\end{itemize}
+\end{frame}
 %===============================================================================
 \section*{}
 %===============================================================================
