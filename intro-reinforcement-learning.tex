@@ -229,11 +229,14 @@
 \end{frame}
 
 \begin{frame}{Motivating real world examples}
+\Large \centering
+Robotics, Games, Finance, Healthcare, \dots \\[2cm]
 \centering
 \href{https://www.youtube.com/watch?v=V1eYniJ0Rnk}{\includegraphics[width=0.32\textwidth]{img/atari.png}}
 \href{https://www.youtube.com/watch?v=43cO39XBPIA}{\includegraphics[width=0.32\textwidth]{img/robots.png}}
 \href{https://www.youtube.com/watch?v=gn4nRCC9TwQ}{\includegraphics[width=0.32\textwidth]{img/ppo.png}}
 \end{frame}
+
 \section{Formalisation}
 \begin{frame}{Reinforcement Learning: core concept}
 Reinforcement learning formalism include:
@@ -241,7 +244,6 @@ Reinforcement learning formalism include:
 	\item \textbf{Environment}:
 	\begin{itemize}
 		\item Typically \emph{stochastic} and \emph{unknow} but \emph{stationary} (\textbf{Markov Decision Process})
-		\item stochastic \faArrowRight \, the next state is \emph{not} fully determined by the current state and action (random component)
 		\item Environment dynamics (i.e., the \emph{model}) expressed as: $p(s', r | s, a)$ \faArrowRight \, not known by the agent
 	\end{itemize}
 	\item \textbf{Reward signal} 
@@ -255,6 +257,13 @@ Reinforcement learning formalism include:
 		\item \emph{Value} function estimation?
 	\end{itemize}
 \end{itemize}
+\end{frame}
+\begin{frame}{Environment: Stochasticity}
+\begin{itemize}
+	\item The environment is \textbf{stochastic} if the next state is \emph{not} fully determined by the current state and action
+	\item But the environment is \textbf{stationary} if the probability distribution of the next state is the same for all time steps
+\end{itemize}
+\includegraphics[width=\textwidth]{img/env-dynamics.png}
 \end{frame}
 \begin{frame}{Agent and environment}
 \centering
@@ -920,11 +929,16 @@ Reinforcement learning formalism include:
 \begin{frame}{Policy gradient methods -- REINFORCE}
 	\begin{itemize}
 		\item \textbf{Policy gradient} \faArrowRight \, the policy is directly optimized
+		\begin{itemize}
+			\item \textbf{Pro}: can handle continous action space
+			\item \textbf{Pro}: can learn stochastic policies
+			\item \textbf{Pro}: sometimes policies are easier to learn than value functions
+		\end{itemize}
 		\item \bold{REINFORCE} is an policy gradient algorithm for maximizing the expected return $G = \sum_{t=0}^T \gamma^t r_t$
 		\item \emph{intuition}: trial and error
 		\begin{itemize}
 			\item Sample a trajectory $\tau$ from the policy $\pi(\theta$). If the trajectory is good, increase the probability of the actions. Otherwise, decrease the probability of the actions
-			\item It can be seen as stochasti gradient ascent on $G(\H_T)$
+			\item It can be seen as stochasti gradient ascent on $G(H_T)$
 		\end{itemize}
 		\item we want train the policy in a way thata:
 		\begin{equation*}
@@ -935,11 +949,49 @@ Reinforcement learning formalism include:
 \end{frame}	
 \begin{frame}{Policy gradient methods -- REINFORCE (cont.)}
 \begin{itemize}
-	\item Maximize $ \mathbb{E}_{\pi(\theta)}[G]$ with gradient ascent:
+	\item The gradient can be estimated using the sample return $G_t$ (came from the policy theorem):
 	\begin{equation*}
-		\nabla_\theta \mathbb{E}_{\pi(\theta)}[G] = \nable_\theta \int G
+		\theta_{n+1} = \theta_{n} + \alpha \nabla log \pi(a | s) G_t
 	\end{equation*}
+	\item The sample return $G_t$ can be only computed at the end of the episode
+	\item Therefore, this is a \emph{episodic} algorithm with Monte Carlo updates
+	
 \end{itemize}
+\begin{exampleblock}{REINFORCE}
+	\begin{itemize}
+		\item Initialize the policy parameters $\theta$
+		\item \textbf{for} episode = 1, M \textbf{do}
+		\begin{itemize}
+			\item Generate an episode following $\pi(\theta)$: $s_1, a_1, r_1, ..., s_T, a_T, r_T$
+			\item $ G = 0 $
+			\item \textbf{for} $t = 1, T$ \textbf{do}
+			\begin{itemize}
+				\item $G \leftarrow$ $r_t + \gamma * G$
+				\item $\theta \leftarrow \theta + \alpha \nabla log \pi(a_t | s_t) G$
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{REINFORCE -- Extension and Limitations}
+\begin{exampleblock}{Limitations}
+	\begin{itemize}
+		\item \textbf{High variance} \faArrowRight \, the gradient is computed using the sample return $G_t$
+		\item \textbf{Sample inefficiency} \faArrowRight \, the policy is updated only at the end of the episode
+	\end{itemize}
+\end{exampleblock}
+\begin{exampleblock}{Extension}
+	\begin{itemize}
+		\item \textbf{Actor-critic} \faArrowRight \, use a critic to estimate the value function
+		\begin{itemize}
+			\item Pro: reduce the variance of the gradient
+			\item Pro: reduce the sample inefficiency
+			\item Cons: you need to train two networks (one for the actor and one for the critic)
+		\end{itemize}
+		\item \textbf{Proximal Policy Optimization} \faArrowRight \, use a surrogate objective function to avoid too large policy updates
+	\end{itemize}
+\end{exampleblock}
 \end{frame}
 %===============================================================================
 \section*{}
