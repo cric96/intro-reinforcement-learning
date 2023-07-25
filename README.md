@@ -4,4 +4,4 @@ This repository contains the slides for the lecture on Reinforcement Learning at
 This an introductory course of 4 hours that will cover:
 - The basics of Reinforcement Learning, cover the meaning of the main concepts (agent, environment, state, action, reward, policy, value function, model) and the main differences with respect to supervised learning.
 - The main algorithms for solving RL problems (mainly Q-Learning and Policy Gradient).
-- hands-on session with OpenAI Gym and Torch-RL.
+- hands-on session with OpenAI Gym and Pytorch.
