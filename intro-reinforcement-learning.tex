@@ -125,7 +125,8 @@
 \begin{frame}[plain,c]
 	%\frametitle{A first slide}
 	\begin{center}
-	\Huge What is Reinforcement Learning?
+	\Huge What is Reinforcement Learning? \\
+	\only<2>{\large It is related with the concept of \textbf{intelligence}}
 	\end{center}
 \end{frame}
 
@@ -134,7 +135,9 @@
 	\begin{center}
 	\Huge What is Intelligence?
 	\\
-	\huge \emph{\textbf{learning} to make \textbf{decisions} to achive \textbf{goals}}
+	\large \only<2>{[..] otherwise called ``good sense'', ``practical sense'', ``initiative'', the faculty of adapting one's self to circumstances}
+	\large \only<3>{\emph{Goal-directed} adaptive behavior}
+	\huge \only<4>{\emph{\textbf{learning} to make \textbf{decisions} to achive \textbf{goals}}}
 	\end{center}
 \end{frame}
 \begin{frame}{What is Reinforcement Learning?}
@@ -168,7 +171,7 @@
 
 \begin{frame}{On problem expressiveness: reward hypothesis}
 \begin{block}{Reward hypothesis}
-\emph{Any goal can be formalized as the outcome of maximizing a cumulative reward}
+\emph{Any goal can be formalized as the outcome of maximizing a cumulative reward}\footnote{\url{http://incompleteideas.net/rlai.cs.ualberta.ca/RLAI/rewardhypothesis.html}}
 \begin{itemize}
 	\item Reinforcement learning is based on this hypothesis
 	\item Ideally, we can formalize any problem as a reinforcement learning problem
@@ -176,7 +179,7 @@
 \end{block}
 
 \begin{alertblock}{Stronger statement: reward is enough}
-\emph{intelligence, and its associated abilities, can be understood as subserving the maximisation of reward by an agent acting in its environment.}
+\emph{intelligence, and its associated abilities, can be understood as subserving the maximisation of reward by an agent acting in its environment.}~\footnote{\fullcite{Silver2021}}
 \begin{itemize}
 	\item Really controversial
 \end{itemize}
@@ -279,6 +282,14 @@ Reinforcement learning formalism include:
 		\item Receives the action $a_t$
 		\item Emits the observation $s_{t+1}$ and the reward $r_{t+1}$
 	\end{itemize}
+	\item The agent-environment interaction can be (i.e., the \textbf{task}):
+	\begin{itemize}
+		\item \emph{Episodic}: the agent-environment interaction breaks down into episodes (e.g., chess)
+		\begin{itemize}
+			\item A sequence of actions that terminates in a terminal state
+		\end{itemize}
+		\item \emph{Continuing}: the agent-environment interaction continues without limit (e.g., robot)
+	\end{itemize}
 \end{itemize}
 \end{frame}
 \begin{frame}{Agent state}
@@ -293,7 +304,7 @@ Reinforcement learning formalism include:
 	\end{itemize}
 	\item The environment state can be either:
 	\begin{itemize}
-		\item \textbf{Fully observable}: the agent knows the state
+		\item \textbf{Fully observable}: the agent knows the full environment state
 		\item \textbf{Partially observable}: the agent partially observes environment state 
 	\end{itemize}
 	\item Today we will assume that the state is \textbf{fully observable} and \textbf{Markovian}
@@ -309,7 +320,7 @@ Reinforcement learning formalism include:
 
 \begin{itemize}
 	\item \textbf{Action}: move in one of the four directions (up, down, left, right)
-	\item \textbf{State}:\only<1>{\emph{???}} \only<2>{
+	\item \textbf{State}:\only<1>{\emph{???}}\only<2>{
 		\emph{position in the maze}}
 	\item \textbf{Reward}: \emph{???}
 	\item \textbf{Policy}: \emph{???}
@@ -323,7 +334,7 @@ Reinforcement learning formalism include:
 		\item In a robot, $r_t = 1$ if the robot reaches the target, $r_t = 0$ otherwise
 		\item For a portfolio, $r_t$ is the profit
 	\end{itemize}
-	\item Describes how well the agent is doing at step $t$ (define the goal)
+	\item Describes how well the agent is doing at step $t$ (\emph{define the goal})
 	\item The agent's sole objective is to maximize the discounted cumulative reward (\bold{return})
 	\begin{equation*}
 	\begin{split}
@@ -358,15 +369,23 @@ Reinforcement learning formalism include:
 \end{frame}
 \begin{frame}{Agent Policy}
 \begin{itemize}
-	\item The agent's behavior is determined by a \bold{policy} $\pi$
+	\item The agent's behaviour is determined by a \bold{policy} $\pi$
 	\item A policy is a mapping from state to action
+	\item An action is something that affects the state
+	\begin{itemize}
+		\item the action can be either:
+		\begin{itemize}
+			\item \textbf{Discrete}: $\mathcal{A} = \{ a_1, a_2, \dots, a_n \}$ (e.g., chess)
+			\item \textbf{Continuous}: $\mathcal{A} = \mathbb{R}^n$ (e.g., the torque applied to each joint of a robot)
+		\end{itemize}
+	\end{itemize}
 	\item The policy can be either:
 	\begin{itemize}
 		\item \textbf{Deterministic}: $\pi: \mathcal{S} \rightarrow \mathcal{A}$
 		\item \textbf{Stochastic}: $\pi: \mathcal{S} \times \mathcal{A} \rightarrow [0,1]$
 	\end{itemize}
 	\item The policy is typically represented as a \textbf{lookup table} or a \textbf{neural network}
-	\item In both cases, the policy is based of an \textbf{estimation} of the \emph{value} function
+	\item The policy can be based on an \textbf{estimation} of the \emph{value} function
 \end{itemize}
 \end{frame}
 \begin{frame}{Example: Maze}
@@ -448,12 +467,16 @@ Reinforcement learning formalism include:
 	\item The policy function can be defined on top of the value function (or the state-action value function)
 	\item Greedy policy: $\pi_*(s) = argmax_a q_\pi(s,a)$ 
 	\item Epsilon greedy policy: $\pi_*(s) = argmax_a q_\pi(s,a)$ with probability $1-\epsilon$, otherwise a random action is selected
-	\item A policy $\pi$ is better than or equal to a policy $\pi'$ if its expected return is greater than or equal to that of $\pi'$ for all states
+	\item How to compare policies?? 
+	\begin{itemize}
+		\item A policy $\pi$ is better than or equal to a policy $\pi'$ if its expected return is greater than or equal to that of $\pi'$ for all states
+	\end{itemize}
 	\item The \emph{optimal} policy is the one that maximizes the expected return
 	\item Formally, it can be expressed as:
 	\begin{equation*}
 		\pi_*(s) = argmax_a q_*(s,a)
 	\end{equation*}
+	\item In RL, the policy is essential to explore the environment (\emph{exploration}) while maximizing the reward (\emph(exploitation))
 \end{itemize}
 \end{frame}
 
@@ -474,18 +497,7 @@ Reinforcement learning formalism include:
 \begin{itemize}
 	\item Identify the environment (i.e., the state space $\mathcal{S}$ of a given application)
 	\item Identify the action space $\mathcal{A}$ of a given application (decisions that affect the state)
-	\begin{itemize}
-		\item \emph{Discrete} (e.g., chess)
-		\item \emph{Continuous} (e.g., robot)
-	\end{itemize}
 	\item Identify the task type 
-	\begin{itemize}
-		\item \emph{Episodic}: the agent-environment interaction breaks down into episodes (e.g., chess)
-		\begin{itemize}
-			\item A sequence of actions that terminates in a terminal state
-		\end{itemize}
-		\item \emph{Continuing}: the agent-environment interaction continues without limit (e.g., robot)
-	\end{itemize}
 	\item Identify the reward function $r(s,a)$ (i.e., the goal of the application) 
 \end{itemize}
 \end{exampleblock}
@@ -513,8 +525,9 @@ Reinforcement learning formalism include:
 		\item Evaluate the policy $\pi$ (i.e., compute $v_{\pi}(s) = \mathbb{E}[r_{t+1} + \gamma * {t+1} + ... | s_t = s]$)
 		\item Improve the policy $\pi$ (i.e., compute $\pi'(s) = greedy(v_\pi)$)
 	\end{itemize}
-	\item In general, it nees to be repeated until convergence
-	\item This process \emph{always} converges to the optimal policy
+	\item For each iteration, it is proven that the policy $\pi'$ it is better than or equal to the previous one
+	\item it needs to be repeated until convergence
+	\item This process \emph{always} converges to the optimal policy (in Markov decisions processes)
 	\item Dynamic programming algorithms are based on this idea
 \end{itemize}
 \centering
@@ -541,7 +554,7 @@ Reinforcement learning formalism include:
 		\item True essence of reinforcement learning: \textbf{trial and error}
 		\item Simulated experience is used to solve the problem
 		\item \textbf{Monte Carlo} methods are based on averaging sample returns
-		\item How to guarentee that all states are visited?
+		\item How to guarantee that all states are visited?
 	\end{itemize}
 	\begin{alertblock}<1-2>{Monte carlo with exploring start (ES)}
 		\begin{itemize}
@@ -571,9 +584,9 @@ Reinforcement learning formalism include:
 	\begin{itemize}
 		\item A combination of Monte Carlo ideas and dynamic programming ideas
 		\item Like Monte Carlo methods, TD methods can learn directly from raw experience without a model of the environment's dynamics
-		\item Like dynamic programming methods, TD methods update estimates based in part on other learned estimates, without waiting for a final outcome (they \emph{bootstrap})
+		\item Like dynamic programming methods, TD methods update estimates based in part on other learned estimates, without waiting for an outcome (they \emph{bootstrap})
 		\begin{itemize}
-			\item bootstrap:  value of a state is updated based on the estimated value of the next state
+			\item bootstrap: the value of a state is updated based on the estimated value of the next state
 		\end{itemize}
 	\end{itemize}
 	\begin{exampleblock}{Example methods}
@@ -584,7 +597,7 @@ Reinforcement learning formalism include:
 	\end{exampleblock}
 	\begin{alertblock}{Q-learning}
 		\begin{itemize}
-			\item Generally considered a flexble, simple and effective method: typically the starting point
+			\item Generally considered a flexible, simple and effective method: typically the starting point
 		\end{itemize}
 	\end{alertblock}
 \end{frame}
@@ -598,7 +611,7 @@ Reinforcement learning formalism include:
 	\end{exampleblock}
 	\begin{alertblock}<2>{Full algorithm (episodic task)}
 		\begin{itemize}
-			\item initialize Q arbitrarily, and put 0 on terminal states
+			\item initialize Q arbitrarily and put 0 on terminal states
 			\item for each episode:
 			\item initialize $s_0$ (e.g., randomly) and $t = 0$
 			\begin{itemize}
@@ -638,12 +651,12 @@ Reinforcement learning formalism include:
 \begin{exampleblock}<1-2>{Offline}
 	\begin{itemize}
 		\item create a simulation of the selected environment (e.g., a trading simulator)
-		\item simulate the agent-environment interaction learning the Q-function
-		\item in production use the learned Q-function to take decisions
+		\item simulates the agent-environment interaction learning the Q-function
+		\item in production uses the learned Q-function to take decisions
 		\item \textbf{cons}: 
 		\begin{itemize}
 			\item no adaptation to the real environment
-			\item the simulation must be a good approximation of the real environment
+			\item The simulation must be a good approximation of the real environment
 		\end{itemize}
 	\end{itemize}
 \end{exampleblock}
@@ -674,7 +687,7 @@ Reinforcement learning formalism include:
 			\item \textbf{Policy}: the policy is a function that maps states to actions
 			\begin{itemize}
 				\item It could be a lookup table or a neural network
-				\item In the case of a neural network, there is a need of autodifferentiation library
+				\item In the case of a neural network, there is a need of an autodifferentiation library
 				\item State-of-the-art libraries: \bold{PyTorch} (\url{https://pytorch.org/}), \bold{Tensorflow} (\url{https://www.tensorflow.org/}), and \bold{TorchRL} (\url{https://github.com/pytorch/rl})
 			\end{itemize}
 			\item \textbf{Learning algorithm}: the learning algorithm is responsible for learning the policy
@@ -685,7 +698,7 @@ Reinforcement learning formalism include:
 		\end{itemize}
 	\end{itemize}
 	\centering 
-	\Large Hands-on at \url{todo}
+	\Large Hands-on at \\ \large \url{https://github.com/cric96/intro-reinforcement-learning-python}
 \end{frame}
 \subsection{Approximate methods -- Deep Reinforcement Learning}
 %\subsection{Reinforcement Learning Pitfalls}
@@ -749,7 +762,7 @@ Reinforcement learning formalism include:
 	
 	\begin{alertblock}{Question}
 		\centering
-		\textbf{How to deal with continous action space?}
+		\textbf{How to deal with continuous action space?}
 	\end{alertblock}
 \end{frame}
 \begin{frame}{Reinforcement Learning Pitfalls: Generalization}
@@ -757,7 +770,7 @@ Reinforcement learning formalism include:
 	\begin{itemize}
 		\item \textbf{Generalization} \faArrowRight \, the ability to perform well on previously unseen environments
 		\item Can be also seen as \textbf{transfer learning} \faArrowRight \, the ability to transfer knowledge from one environment to another
-		\item \textbf{Generalization gap} \faArrowRight \, the difference between the performance on the training environments and the performance on the test environments
+		\item \textbf{Generalization gap} \faArrowRight \, the difference between the performance in the training environments and the performance in the test environments
 	\end{itemize}
 \end{block}
 \begin{block}{Example (Go) \, \href{}{\faLink}}
@@ -777,7 +790,7 @@ Reinforcement learning formalism include:
 	\fbox{\includegraphics[width=0.7\textwidth]{img/deep-rl.png}}
 	\begin{block}{Overview}
 		\begin{itemize}
-			\item \textbf{Deep Reinforcement Learning (DRL)} \faArrowRight \, the use of deep neural networks to approximate the value function / policy
+			\item \textbf{Deep Reinforcement Learning (DRL)} \faArrowRight \, the use of deep neural networks to approximate the value function/policy
 			%\item Stochastic gradient descent \faArrowRight \, the use of gradient descent to train the neural networks
 		\end{itemize}
 	\end{block}
@@ -841,7 +854,7 @@ Reinforcement learning formalism include:
 	\begin{block}{How}
 		\begin{itemize}
 			\item Use a separate network to compute the target value
-			\item The target network is updated every $C$ steps
+			\item The target network is updated every $C$ step
 		\end{itemize}
 	\end{block}
 	\begin{block}{Loss computation}
@@ -992,6 +1005,74 @@ Reinforcement learning formalism include:
 		\item \textbf{Proximal Policy Optimization} \faArrowRight \, use a surrogate objective function to avoid too large policy updates
 	\end{itemize}
 \end{exampleblock}
+\end{frame}
+\section{Conclusion and open problems}
+
+\begin{frame}[allowframebreaks]{Open problems}
+	\begin{itemize}
+		\item Reinforcement Learning is a powerful tool to solve sequential decision making problems \dots
+		\item \dots but still there are some open-problems
+	\end{itemize}
+	\begin{exampleblock}{Transfer Learning}
+		\begin{itemize}
+			\item \textbf{Problem}: the agent needs to learn a new task from scratch
+			\item \textbf{Solution}: transfer knowledge from a previous task
+			\item Unfortunately, it is not easy to transfer knowledge from one task to another
+			\item \textbf{Open problem}: how to transfer knowledge from one task to another?
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Sample efficency}
+		\begin{itemize}
+			\item \textbf{Problem}: the agent needs a lot of samples to learn a good policy
+			\item The human brain can learn a new task with few samples, why RL agents cannot?
+			\item \textbf{Open problem}: how to explore the environment efficiently?
+			\item Ideas: curiosity, intrinsic motivation, long-time versus short-time learning learning
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Safe exploration}
+		\begin{itemize}
+			\item \textbf{Problem}: the agent needs to explore the environment to learn a good policy without taking bad decisions
+			\item \textbf{Open problem}: how to explore the environment safely?
+		\end{itemize}		
+	\end{exampleblock}
+	\begin{exampleblock}{Multi-agent RL}
+		\begin{itemize}
+			\item \textbf{Problem}: the agent needs to learn in a multi-agent environment
+			\item \textbf{Open problem}: how to learn in a multi-agent environment?
+			\item Some issues are: credit assignment, non-stationarity, exploration
+			\item No foundational theory for multi-agent RL (even worst for many agent)
+		\end{itemize}
+	\end{exampleblock}
+	\begin{exampleblock}{Continous adaptation}
+		\begin{itemize}
+			\item \textbf{Problem}: the agent needs to adapt to a changing environment
+			\item \textbf{Open problem}: how to adapt to a changing environment?
+			\item Ideas: meta-learning, continual learning, online learning
+		\end{itemize}
+	\end{exampleblock}
+\end{frame} 
+\begin{frame}{Conclusion}
+	\begin{itemize}
+		\item Reinforcement Learning is a tool really used in practice
+		\begin{itemize}
+			\item \textbf{AlphaGo} \faArrowRight \, DeepMind (2016)
+			\item \textbf{ChatGPT} \faArrowRight \, OpenAI (2023)
+		\end{itemize}
+		\item In this lecture we have seen:
+		\begin{itemize}
+			\item Simple formulation of the RL problem
+			\item Tabular methods (e.g., Q-learning)
+			\item Approximate methods (e.g., DQL)
+			\item Policy gradient methods (e.g., REINFORCE)
+			\item hands-on with gymnasium and PyTorch
+		\end{itemize}
+		\item This is only the tip of the iceberg
+		\begin{itemize}
+			\item Actor-Critic methods \faArrowRight \, A3C, A2C, PPO
+			\item Multi-agent RL \faArrowRight \, MADDPG, QMIX, MAPPO
+			\item Hierarchical RL \faArrowRight \, Healthcare
+		\end{itemize}
+	\end{itemize}
 \end{frame}
 %===============================================================================
 \section*{}
