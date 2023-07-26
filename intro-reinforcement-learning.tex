@@ -240,9 +240,15 @@ Robotics, Games, Finance, Healthcare, \dots \\[2cm]
 \href{https://www.youtube.com/watch?v=gn4nRCC9TwQ}{\includegraphics[width=0.32\textwidth]{img/ppo.png}}
 \end{frame}
 
+\begin{frame}{ChatGPT~\footnote{\url{https://openai.com/blog/chatgpt}}}
+\includegraphics[width=\textwidth]{img/chatgpt.png}
+\end{frame}
+\begin{frame}{Learning Plasma Control for Fusion Science~\footnote{\fullcite{degrave2022magnetic}}}
+\includegraphics[width=\textwidth]{img/plasma.png}
+\end{frame}
 \section{Formalisation}
 \begin{frame}{Reinforcement Learning: core concept}
-Reinforcement learning formalism include:
+Reinforcement learning formalism includes:
 \begin{itemize}
 	\item \textbf{Environment}:
 	\begin{itemize}
@@ -443,15 +449,15 @@ Reinforcement learning formalism include:
 			\end{split}
 		\end{equation*}
 		\item The value itself can be formulated recursively: 
-		\begin{equation*}
-			\begin{split}
-			v_{\pi} & = \mathbb{E}_{\pi} [r_{t+1} + \gamma * G_{t+1} | S_t = s] \\
-			& = \mathbb{E}_{\pi} [r_{t+1} + \gamma * v_{\pi}(s_{t+1}) | S_t = s] \\
-			& = \sum_a \pi(a|s) \sum_{s'} \sum_r p(s', r | s, a) [r + \gamma G_{t+1}(s')]
-			\end{split}
-		\end{equation*}
-		\item This is the \textbf{Bellman equation} and is the basis of many reinforcement learning algorithms (and ideas)
-		\item A similar formulation can be be done for the optimal value function $v_*(s)$
+		%\begin{equation*}
+		%	\begin{split}
+		%	v_{\pi} & = \mathbb{E}_{\pi} [r_{t+1} + \gamma * G_{t+1} | S_t = s] \\
+		%	& = \mathbb{E}_{\pi} [r_{t+1} + \gamma * v_{\pi}(s_{t+1}) | S_t = s] \\
+		%	& = \sum_a \pi(a|s) \sum_{s'} \sum_r p(s', r | s, a) [r + \gamma G_{t+1}(s')]
+		%	\end{split}
+		%\end{equation*}
+		\item This idea can be used for computing the optimal value function $v_*(s)$ (Bellman equation)
+		
 		\begin{equation*}
 			v^*(s) = max_a \mathbb{E} [r_{t+1} + \gamma * v_*(s_{t+1}) | S_t = s, A_t = a]
 		\end{equation*}
@@ -525,7 +531,7 @@ Reinforcement learning formalism include:
 		\item Evaluate the policy $\pi$ (i.e., compute $v_{\pi}(s) = \mathbb{E}[r_{t+1} + \gamma * {t+1} + ... | s_t = s]$)
 		\item Improve the policy $\pi$ (i.e., compute $\pi'(s) = greedy(v_\pi)$)
 	\end{itemize}
-	\item For each iteration, it is proven that the policy $\pi'$ it is better than or equal to the previous one
+	\item For each iteration, it is proven that the policy $\pi'$ is better than or equal to the previous one
 	\item it needs to be repeated until convergence
 	\item This process \emph{always} converges to the optimal policy (in Markov decisions processes)
 	\item Dynamic programming algorithms are based on this idea
@@ -953,7 +959,7 @@ Reinforcement learning formalism include:
 			\item Sample a trajectory $\tau$ from the policy $\pi(\theta$). If the trajectory is good, increase the probability of the actions. Otherwise, decrease the probability of the actions
 			\item It can be seen as stochasti gradient ascent on $G(H_T)$
 		\end{itemize}
-		\item we want train the policy in a way thata:
+		\item we want to train the policy in a way theta:
 		\begin{equation*}
 			\theta_{n+1} = \theta_{n} + \alpha \nabla J(\theta_n)
 		\end{equation*}
@@ -1010,7 +1016,7 @@ Reinforcement learning formalism include:
 
 \begin{frame}[allowframebreaks]{Open problems}
 	\begin{itemize}
-		\item Reinforcement Learning is a powerful tool to solve sequential decision making problems \dots
+		\item Reinforcement Learning is a powerful tool to solve sequential decision-making problems \dots
 		\item \dots but still there are some open-problems
 	\end{itemize}
 	\begin{exampleblock}{Transfer Learning}
@@ -1040,7 +1046,7 @@ Reinforcement learning formalism include:
 			\item \textbf{Problem}: the agent needs to learn in a multi-agent environment
 			\item \textbf{Open problem}: how to learn in a multi-agent environment?
 			\item Some issues are: credit assignment, non-stationarity, exploration
-			\item No foundational theory for multi-agent RL (even worst for many agent)
+			\item No foundational theory for multi-agent RL (even worst for many agents)
 		\end{itemize}
 	\end{exampleblock}
 	\begin{exampleblock}{Continous adaptation}
